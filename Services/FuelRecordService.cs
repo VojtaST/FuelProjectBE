@@ -28,7 +28,8 @@ namespace FuelProject.Services
                 FuelAmount = request.FuelAmount,
                 NameOfFuelStation = request.NameOfFuelStation,
                 PricePerLiter = request.PricePerLiter,
-                TotalPrice = request.TotalPrice
+                TotalPrice = request.TotalPrice,
+                DateOfRefuel = request.DateOfRefuel
             };
             return fuelRecord;
         }

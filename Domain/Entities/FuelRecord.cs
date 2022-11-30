@@ -10,4 +10,5 @@ public class FuelRecord
     public float TotalPrice { get; set; }
     public Car Car { get; set; }
     public User User { get; set; }
+    public DateTime DateOfRefuel { get; set; }
 }
