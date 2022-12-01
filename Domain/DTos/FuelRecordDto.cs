@@ -8,5 +8,6 @@
         public float PricePerLiter { get; set; }
         public float TotalPrice { get; set; }
         public string CarId { get; set; }
+        public DateTime DateOfRefuel { get; set; }
     }
 }

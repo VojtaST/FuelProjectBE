@@ -35,7 +35,7 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, LoginUs
                 issuer: "http://localhost:5235",
                 audience: "http://localhost:5235",
                 claims: new List<Claim>(),
-                expires: DateTime.Now.AddMinutes(6),
+                expires: DateTime.Now.AddMinutes(20),
                 signingCredentials: signinCredentials
             );
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);

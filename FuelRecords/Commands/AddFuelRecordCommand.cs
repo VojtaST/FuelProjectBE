@@ -13,6 +13,7 @@ public class AddFuelRecordCommand : IRequest
     public float TotalPrice { get; set; }
     public string CarId { get; set; }
     public DateTime DateOfRefuel { get; set; }
+    public string UserId { get; set; }
 }
 
 public class AddFuelRecordCommandHandler : IRequestHandler<AddFuelRecordCommand>
@@ -28,7 +29,7 @@ public class AddFuelRecordCommandHandler : IRequestHandler<AddFuelRecordCommand>
 
     public async Task<Unit> Handle(AddFuelRecordCommand request, CancellationToken cancellationToken)
     {
-        var fuelRecord = await _fuelRecordService.CreateFuelRecord(request, "3b23416f-142d-4631-9668-21db6a646e94");
+        var fuelRecord = await _fuelRecordService.CreateFuelRecord(request, request.UserId);
 
         await _fuelRecordRepository.Add(fuelRecord);
         return Unit.Value;
