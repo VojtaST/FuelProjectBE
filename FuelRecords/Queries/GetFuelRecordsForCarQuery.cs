@@ -20,7 +20,7 @@ public class GetFuelRecordsForCarQueryHandler : IRequestHandler<GetFuelRecordsFo
 
     public async Task<List<FuelRecordDto>> Handle(GetFuelRecordsForCarQuery request, CancellationToken cancellationToken)
     {
-        var redords = (await _fuelRecordRepository.GetFuelRecordsForCar("df348454-efd6-454e-ae3c-7323d4d6037a")).ToList();
+        var redords = (await _fuelRecordRepository.GetFuelRecordsForCar(request.CarId)).ToList();
 
         return _mapper.Map<List<FuelRecord>, List<FuelRecordDto>>(redords);       
     }
