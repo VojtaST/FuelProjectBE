@@ -8,7 +8,7 @@ namespace FuelProject.Domain.Profiles
     {
         public FuelRecordsProfile()
         {
-            CreateMap<FuelRecord, FuelRecordDto>();
+            CreateMap<FuelRecord, FuelRecordDto>().ForMember(dest => dest.DashboardKm, opt => opt.MapFrom(src => src.DashboardKms));
         }
     }
 }

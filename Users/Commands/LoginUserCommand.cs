@@ -27,21 +27,10 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, LoginUs
         if (await _userService.CheckCredentials(request.userName, request.password))
         {
             //vygenerovat token
-            var user = await _userRepository.GetUserByUsername(request.userName);
+            var user = await _userRepository.GetUserByUsername(request.userName);          
+            var authResult = await _userService.GenerateToken();
 
-            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigurationManagerCustom.AppSetting["JWT:Secret"]));
-            var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-            var tokeOptions = new JwtSecurityToken(
-                issuer: "http://localhost:5235",
-                audience: "http://localhost:5235",
-                claims: new List<Claim>(),
-                expires: DateTime.Now.AddMinutes(20),
-                signingCredentials: signinCredentials
-            );
-            var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
-
-
-            return new LoginUserDto(user.Id.ToString(), tokenString);
+            return new LoginUserDto(user.Id.ToString(), authResult);
         }
         return null;
     }
