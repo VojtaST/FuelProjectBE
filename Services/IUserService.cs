@@ -2,6 +2,7 @@
 {
     public interface IUserService
     {
-        Task<bool> CheckCredentials(string username, string password);  
+        Task<bool> CheckCredentials(string username, string password);
+        Task<string> GenerateToken();
     }
 }
