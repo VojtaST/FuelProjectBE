@@ -19,6 +19,13 @@ namespace FuelProject.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task Delete(string id)
+        {
+            var car = await GetCarById(id);
+            _context.Cars.Remove(car);
+            _context.SaveChanges(); 
+        }
+
         public Task<Car?> GetCarById(string id)
         {
             return _context.Cars.FirstOrDefaultAsync(c => c.Id.ToString() == id);
@@ -28,6 +35,12 @@ namespace FuelProject.Repositories
         {
 
             return (await _context.Users.Where(x => x.Id.ToString() == userId).FirstAsync()).Cars;
+        }
+
+        public async Task Update(Car car)
+        {
+            _context.Update(car);
+           await  _context.SaveChangesAsync();
         }
     }
 }

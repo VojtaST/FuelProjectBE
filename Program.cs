@@ -2,6 +2,7 @@ using FuelProject.Infrastructure;
 using FuelProject.Repositories;
 using FuelProject.Services;
 using MediatR;
+using MediatR.Extensions.AttributedBehaviors;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -18,6 +19,7 @@ builder.Services.AddDbContext<DiaryDbContext>(options =>
 
 // Add services to the container.
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
+builder.Services.AddMediatRAttributedBehaviors(Assembly.GetExecutingAssembly());
 builder.Services.AddAutoMapper(config => config.AddMaps(Assembly.GetExecutingAssembly()));
 builder.Services.AddScoped<ICarRepository, CarRepository>();
 builder.Services.AddScoped<IFuelRecordRepository, FuelRecordRepository>();
