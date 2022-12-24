@@ -29,15 +29,7 @@ namespace FuelProject.Users.Commands
         public async Task<LoginUserDto> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
             //TODO vytvořit servicu
-            User user = new User()
-            {
-                FirstName = request.FirstName,
-                Surname = request.Surname,
-                Password = request.Password,
-                UserName = request.Username,
-                Cars = new List<Car>()
-            };
-
+            var user = await  _userService.CreateUser(request.FirstName, request.Surname, request.Password, request.Username);
             _context.Add(user);
             await _context.SaveChangesAsync();
             var token = await _userService.GenerateToken();
