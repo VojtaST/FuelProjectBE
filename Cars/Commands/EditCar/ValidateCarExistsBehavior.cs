@@ -2,25 +2,24 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FuelProject.Cars.Commands.EditCar
+namespace FuelProject.Cars.Commands.EditCar;
+
+public class ValidateCarExistsBehavior : IPipelineBehavior<EditCarCommand, ActionResult>
 {
-    public class ValidateCarExistsBehavior : IPipelineBehavior<EditCarCommand, ActionResult>
+    private readonly ICarRepository _carRepository;
+
+    public ValidateCarExistsBehavior(ICarRepository carRepository)
     {
-        private readonly ICarRepository _carRepository;
+        _carRepository = carRepository;
+    }
 
-        public ValidateCarExistsBehavior(ICarRepository carRepository)
+    public async Task<ActionResult> Handle(EditCarCommand request, RequestHandlerDelegate<ActionResult> next, CancellationToken cancellationToken)
+    {
+       var car = await _carRepository.GetCarById(request.Id);
+        if (car is null)
         {
-            _carRepository = carRepository;
+            return new NotFoundObjectResult("Car not found");
         }
-
-        public async Task<ActionResult> Handle(EditCarCommand request, RequestHandlerDelegate<ActionResult> next, CancellationToken cancellationToken)
-        {
-           var car = await _carRepository.GetCarById(request.Id);
-            if (car is null)
-            {
-                return new NotFoundObjectResult("Car not found");
-            }
-            return await next();
-        }
+        return await next();
     }
 }

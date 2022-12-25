@@ -1,10 +1,9 @@
 ﻿using FuelProject.Domain.Entities;
 using FuelProject.FuelRecords.Commands;
 
-namespace FuelProject.Services
+namespace FuelProject.Services;
+
+public interface IFuelRecordService
 {
-    public interface IFuelRecordService
-    {
-        Task<FuelRecord> CreateFuelRecord(AddFuelRecordCommand request, string userId);
-    }
+    Task<FuelRecord> CreateFuelRecord(AddFuelRecordCommand request, string userId);
 }

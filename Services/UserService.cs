@@ -7,49 +7,48 @@ using System.Security.Claims;
 using System.Text;
 using BCR = BCrypt.Net.BCrypt;
 
-namespace FuelProject.Services
+namespace FuelProject.Services;
+
+public class UserService : IUserService
 {
-    public class UserService : IUserService
+    private readonly IUserRepository _userRepository;
+
+    public UserService(IUserRepository userRepository)
     {
-        private readonly IUserRepository _userRepository;
+        _userRepository = userRepository;
+    }
 
-        public UserService(IUserRepository userRepository)
-        {
-            _userRepository = userRepository;
-        }
+    public async Task<bool> CheckCredentials(string username, string password)
+    {
+        var user = await _userRepository.GetUserByUsername(username);
+        if (user is not null && BCR.Verify(password,user.Password)) return true;
+        return false;
+    }
 
-        public async Task<bool> CheckCredentials(string username, string password)
+    public Task<User> CreateUser(string firstName, string surname, string password, string username)
+    {
+        return Task.FromResult(new User()
         {
-            var user = await _userRepository.GetUserByUsername(username);
-            if (user is not null && BCR.Verify(password,user.Password)) return true;
-            return false;
-        }
+            FirstName = firstName,
+            Surname = surname,
+            Password = BCR.HashPassword(password, 4),
+            UserName = username,
+            Cars = new List<Car>()
+        });
+    }
 
-        public Task<User> CreateUser(string firstName, string surname, string password, string username)
-        {
-            return Task.FromResult(new User()
-            {
-                FirstName = firstName,
-                Surname = surname,
-                Password = BCR.HashPassword(password, 4),
-                UserName = username,
-                Cars = new List<Car>()
-            });
-        }
-
-        public Task<string> GenerateToken()
-        {
-            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigurationManagerCustom.AppSetting["JWT:Secret"]));
-            var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-            var tokeOptions = new JwtSecurityToken(
-                issuer: "http://localhost:5235",
-                audience: "http://localhost:5235",
-                claims: new List<Claim>(),
-                expires: DateTime.Now.AddMinutes(20),
-                signingCredentials: signinCredentials
-            );
-            var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
-            return Task.FromResult(tokenString);
-        }
+    public Task<string> GenerateToken()
+    {
+        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigurationManagerCustom.AppSetting["JWT:Secret"]));
+        var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+        var tokeOptions = new JwtSecurityToken(
+            issuer: "http://localhost:5235",
+            audience: "http://localhost:5235",
+            claims: new List<Claim>(),
+            expires: DateTime.Now.AddMinutes(20),
+            signingCredentials: signinCredentials
+        );
+        var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+        return Task.FromResult(tokenString);
     }
 }

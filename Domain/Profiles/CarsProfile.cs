@@ -2,13 +2,12 @@
 using FuelProject.Domain.DTos;
 using FuelProject.Domain.Entities;
 
-namespace FuelProject.Domain.Profiles
+namespace FuelProject.Domain.Profiles;
+
+public class CarsProfile : Profile
 {
-    public class CarsProfile : Profile
+    public CarsProfile()
     {
-        public CarsProfile()
-        {
-            CreateMap<Car, CarDto>();
-        }
+        CreateMap<Car, CarDto>();
     }
 }

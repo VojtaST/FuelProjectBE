@@ -2,13 +2,12 @@
 using FuelProject.Domain.DTos;
 using FuelProject.Domain.Entities;
 
-namespace FuelProject.Domain.Profiles
+namespace FuelProject.Domain.Profiles;
+
+public class FuelRecordsProfile : Profile
 {
-    public class FuelRecordsProfile : Profile
+    public FuelRecordsProfile()
     {
-        public FuelRecordsProfile()
-        {
-            CreateMap<FuelRecord, FuelRecordDto>().ForMember(dest => dest.DashboardKm, opt => opt.MapFrom(src => src.DashboardKms));
-        }
+        CreateMap<FuelRecord, FuelRecordDto>().ForMember(dest => dest.DashboardKm, opt => opt.MapFrom(src => src.DashboardKms));
     }
 }
