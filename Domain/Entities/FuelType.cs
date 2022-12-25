@@ -1,8 +1,7 @@
-﻿namespace FuelProject.Domain.Entities
+﻿namespace FuelProject.Domain.Entities;
+
+public enum FuelType
 {
-    public enum FuelType
-    {
-       GAS=0,
-       OIL
-    }
+   GAS=0,
+   OIL
 }

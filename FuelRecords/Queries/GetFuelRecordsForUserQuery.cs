@@ -5,26 +5,25 @@ using FuelProject.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FuelProject.FuelRecords.Queries
+namespace FuelProject.FuelRecords.Queries;
+
+public record GetFuelRecordsForUserQuery(string UserId):IRequest<ActionResult<List<FuelRecordDto>>>;
+
+public class GetFuelRecordsForUserQueryHandler : IRequestHandler<GetFuelRecordsForUserQuery, ActionResult<List<FuelRecordDto>>>
 {
-    public record GetFuelRecordsForUserQuery(string UserId):IRequest<ActionResult<List<FuelRecordDto>>>;
+    private readonly IFuelRecordRepository _fuelRecordRepository;
+    private readonly IMapper _mapper;
 
-    public class GetFuelRecordsForUserQueryHandler : IRequestHandler<GetFuelRecordsForUserQuery, ActionResult<List<FuelRecordDto>>>
+    public GetFuelRecordsForUserQueryHandler(IFuelRecordRepository fuelRecordRepository, IMapper mapper)
     {
-        private readonly IFuelRecordRepository _fuelRecordRepository;
-        private readonly IMapper _mapper;
+        _fuelRecordRepository = fuelRecordRepository;
+        _mapper = mapper;
+    }
 
-        public GetFuelRecordsForUserQueryHandler(IFuelRecordRepository fuelRecordRepository, IMapper mapper)
-        {
-            _fuelRecordRepository = fuelRecordRepository;
-            _mapper = mapper;
-        }
+    public async Task<ActionResult<List<FuelRecordDto>>> Handle(GetFuelRecordsForUserQuery request, CancellationToken cancellationToken)
+    {
+        var redords = (await _fuelRecordRepository.GetFuelRecordsForUser(request.UserId)).ToList();
 
-        public async Task<ActionResult<List<FuelRecordDto>>> Handle(GetFuelRecordsForUserQuery request, CancellationToken cancellationToken)
-        {
-            var redords = (await _fuelRecordRepository.GetFuelRecordsForUser(request.UserId)).ToList();
-
-            return new OkObjectResult(_mapper.Map<List<FuelRecord>, List<FuelRecordDto>>(redords));
-        }
+        return new OkObjectResult(_mapper.Map<List<FuelRecord>, List<FuelRecordDto>>(redords));
     }
 }
