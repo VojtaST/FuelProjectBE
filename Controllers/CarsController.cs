@@ -1,4 +1,5 @@
 ﻿using FuelProject.Cars.Commands;
+using FuelProject.Cars.Commands.AddUser;
 using FuelProject.Cars.Commands.DeleteCar;
 using FuelProject.Cars.Queries;
 using MediatR;
@@ -44,6 +45,13 @@ namespace FuelProject.Controllers
         public async Task<ActionResult> DeleteCar([FromRoute] string id)
         {
             return Ok(await _mediator.Send(new DeteleCarCommand(id)));
+        }
+
+        [HttpPost("{id}/add-user")]
+        public async Task<ActionResult> AddUserToCar([FromRoute] string id, [FromBody] AddUserToCarCommand command)
+        {
+            command.CarId=id;
+            return await _mediator.Send(command);
         }
     }
 }

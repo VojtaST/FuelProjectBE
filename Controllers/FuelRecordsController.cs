@@ -1,4 +1,5 @@
-﻿using FuelProject.FuelRecords.Commands;
+﻿using FuelProject.Domain.DTos;
+using FuelProject.FuelRecords.Commands;
 using FuelProject.FuelRecords.Queries;
 using FuelProject.Users.Commands;
 using MediatR;
@@ -32,10 +33,17 @@ namespace FuelProject.Controllers
         }
 
         [HttpGet("fuel-records-user")]
-        public async Task<ActionResult> GetFuelRecordsPerUser([FromQuery] string UserId)
+        public async Task<ActionResult<List<FuelRecordDto>>> GetFuelRecordsPerUser([FromQuery] string UserId)
         {
             GetFuelRecordsForUserQuery query = new(UserId);
-            return Ok(await _mediator.Send(query));
+            return await _mediator.Send(query);
+        }
+
+        [HttpPut("{id}/edit")]
+        public async Task<ActionResult> EditFuelRecord([FromRoute] string id, [FromBody] EditFuelRecordCommand command)
+        {
+            command.Id = id;
+            return Ok(await _mediator.Send(command));
         }
     }
 }
