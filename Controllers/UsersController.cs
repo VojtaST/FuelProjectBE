@@ -1,4 +1,5 @@
-﻿using FuelProject.Users.Commands;
+﻿using FuelProject.Domain.DTos;
+using FuelProject.Users.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -17,16 +18,16 @@ namespace FuelProject.Controllers
         protected IMediator _mediator { get; }
 
         [HttpPost("login")]
-        public async Task<ActionResult> LoginUser([FromBody] LoginUserCommand command)
+        public async Task<ActionResult<LoginUserDto>> LoginUser([FromBody] LoginUserCommand command)
         {
-            return Ok(await _mediator.Send(command));
+            return await _mediator.Send(command);
         }
 
         [HttpPost("register")]
         [EnableCors("AllowOrigin")]
-        public async Task<ActionResult> RegisterUser([FromBody] RegisterUserCommand command)
+        public async Task<ActionResult<LoginUserDto>> RegisterUser([FromBody] RegisterUserCommand command)
         {
-            return Ok(await _mediator.Send(command));
+            return await _mediator.Send(command);
         }
     }
 }

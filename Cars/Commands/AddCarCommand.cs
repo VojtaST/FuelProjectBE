@@ -1,10 +1,11 @@
 ﻿using FuelProject.Domain.Entities;
 using FuelProject.Repositories;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FuelProject.Cars.Commands
 {
-    public class AddCarCommand : IRequest
+    public class AddCarCommand : IRequest<ActionResult>
     {
         public string Name { get; set; }
         public string LicencePlate { get; set; }
@@ -12,7 +13,7 @@ namespace FuelProject.Cars.Commands
         public string UserId { get; set; }
     }
 
-    public class AddCarCommandHandler : IRequestHandler<AddCarCommand>
+    public class AddCarCommandHandler : IRequestHandler<AddCarCommand, ActionResult>
     {
         private readonly ICarRepository _carRepository;
         private readonly IUserRepository _userRepository;
@@ -23,7 +24,7 @@ namespace FuelProject.Cars.Commands
             _userRepository = userRepository;
         }
 
-        public async Task<Unit> Handle(AddCarCommand request, CancellationToken cancellationToken)
+        public async Task<ActionResult> Handle(AddCarCommand request, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetUserById(request.UserId);
             Car car = new()
@@ -35,7 +36,7 @@ namespace FuelProject.Cars.Commands
                 Users = new List<User>() { user },
             };
             await _carRepository.Add(car);
-            return Unit.Value;
+            return new OkResult();
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using FuelProject.Repositories;
 using FuelProject.Services;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FuelProject.FuelRecords.Commands;
 
-public class AddFuelRecordCommand : IRequest
+public class AddFuelRecordCommand : IRequest<ActionResult>
 {
     public string NameOfFuelStation { get; set; }
     public float FuelAmount { get; set; }
@@ -16,7 +17,7 @@ public class AddFuelRecordCommand : IRequest
     public string UserId { get; set; }
 }
 
-public class AddFuelRecordCommandHandler : IRequestHandler<AddFuelRecordCommand>
+public class AddFuelRecordCommandHandler : IRequestHandler<AddFuelRecordCommand,ActionResult>
 {
     private readonly IFuelRecordRepository _fuelRecordRepository;
     private readonly IFuelRecordService _fuelRecordService;
@@ -27,11 +28,11 @@ public class AddFuelRecordCommandHandler : IRequestHandler<AddFuelRecordCommand>
         _fuelRecordService = fuelRecordService;
     }
 
-    public async Task<Unit> Handle(AddFuelRecordCommand request, CancellationToken cancellationToken)
+    public async Task<ActionResult> Handle(AddFuelRecordCommand request, CancellationToken cancellationToken)
     {
         var fuelRecord = await _fuelRecordService.CreateFuelRecord(request, request.UserId);
 
         await _fuelRecordRepository.Add(fuelRecord);
-        return Unit.Value;
+        return new OkResult();
     }
 }

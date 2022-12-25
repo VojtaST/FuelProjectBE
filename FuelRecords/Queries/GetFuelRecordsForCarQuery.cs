@@ -3,11 +3,12 @@ using FuelProject.Domain.DTos;
 using FuelProject.Domain.Entities;
 using FuelProject.Repositories;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FuelProject.FuelRecords.Queries;
 
-public record GetFuelRecordsForCarQuery(string CarId) : IRequest<List<FuelRecordDto>>;
-public class GetFuelRecordsForCarQueryHandler : IRequestHandler<GetFuelRecordsForCarQuery, List<FuelRecordDto>>
+public record GetFuelRecordsForCarQuery(string CarId) : IRequest<ActionResult<List<FuelRecordDto>>>;
+public class GetFuelRecordsForCarQueryHandler : IRequestHandler<GetFuelRecordsForCarQuery, ActionResult<List<FuelRecordDto>>>
 {
     private readonly IFuelRecordRepository _fuelRecordRepository;
     private readonly IMapper _mapper;
@@ -18,10 +19,10 @@ public class GetFuelRecordsForCarQueryHandler : IRequestHandler<GetFuelRecordsFo
         _mapper = mapper;
     }
 
-    public async Task<List<FuelRecordDto>> Handle(GetFuelRecordsForCarQuery request, CancellationToken cancellationToken)
+    public async Task<ActionResult<List<FuelRecordDto>>> Handle(GetFuelRecordsForCarQuery request, CancellationToken cancellationToken)
     {
-        var redords = (await _fuelRecordRepository.GetFuelRecordsForCar(request.CarId)).OrderBy(x=>x.DateOfRefuel).ToList();
-        
-        return _mapper.Map<List<FuelRecord>, List<FuelRecordDto>>(redords);       
+        var redords = (await _fuelRecordRepository.GetFuelRecordsForCar(request.CarId)).OrderBy(x => x.DateOfRefuel).ToList();
+
+        return new OkObjectResult(_mapper.Map<List<FuelRecord>, List<FuelRecordDto>>(redords));
     }
 }

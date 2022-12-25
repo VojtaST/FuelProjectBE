@@ -3,11 +3,12 @@ using FuelProject.Domain.Entities;
 using FuelProject.Repositories;
 using MediatR;
 using MediatR.Extensions.AttributedBehaviors;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FuelProject.Cars.Commands
 {
     [MediatRBehavior(typeof(ValidateCarExistsBehavior))]
-    public class EditCarCommand : IRequest
+    public class EditCarCommand : IRequest<ActionResult>
     {
         public string Id { get; set; } = string.Empty;
         public string Name { get; set; }
@@ -15,7 +16,7 @@ namespace FuelProject.Cars.Commands
         public FuelType FuelType { get; set; }
     }
 
-    public class EditCarCommandHandler : IRequestHandler<EditCarCommand>
+    public class EditCarCommandHandler : IRequestHandler<EditCarCommand, ActionResult>
     {
         private readonly ICarRepository _carRepository;
 
@@ -24,7 +25,7 @@ namespace FuelProject.Cars.Commands
             _carRepository = carRepository;
         }
 
-        public async Task<Unit> Handle(EditCarCommand request, CancellationToken cancellationToken)
+        public async Task<ActionResult> Handle(EditCarCommand request, CancellationToken cancellationToken)
         {
             var car = await _carRepository.GetCarById(request.Id);
 
@@ -33,7 +34,7 @@ namespace FuelProject.Cars.Commands
             car.LicencePlate = request.LicencePlate;
             await _carRepository.Update(car);
 
-            return Unit.Value;
+            return new OkResult();
         }
     }
 }
