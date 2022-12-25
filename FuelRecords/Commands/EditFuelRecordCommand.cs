@@ -1,10 +1,10 @@
 ﻿using FuelProject.Repositories;
 using MediatR;
-using System.Runtime.CompilerServices;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FuelProject.FuelRecords.Commands
 {
-    public class EditFuelRecordCommand : IRequest
+    public class EditFuelRecordCommand : IRequest<ActionResult>
     {
         public string Id { get; set; } = string.Empty;
         public string NameOfFuelStation { get; set; }
@@ -15,18 +15,18 @@ namespace FuelProject.FuelRecords.Commands
         public string CarId { get; set; }
         public DateTime DateOfRefuel { get; set; }
     }
-    public class EditFuelRecordCommandHandler : IRequestHandler<EditFuelRecordCommand>
+    public class EditFuelRecordCommandHandler : IRequestHandler<EditFuelRecordCommand, ActionResult>
     {
         private readonly IFuelRecordRepository _fuelRecordRepository;
         private readonly ICarRepository _carRepository;
-       
+
 
         public EditFuelRecordCommandHandler(IFuelRecordRepository fuelRecordRepository)
         {
             _fuelRecordRepository = fuelRecordRepository;
         }
 
-        public async Task<Unit> Handle(EditFuelRecordCommand request, CancellationToken cancellationToken)
+        public async Task<ActionResult> Handle(EditFuelRecordCommand request, CancellationToken cancellationToken)
         {
             var fuelRecord = await _fuelRecordRepository.Get(request.Id);
             if (fuelRecord.Car.Id.ToString() != request.CarId)
@@ -43,7 +43,7 @@ namespace FuelProject.FuelRecords.Commands
 
             await _fuelRecordRepository.Update(fuelRecord);
 
-            return Unit.Value;
+            return new OkResult();
         }
     }
 }

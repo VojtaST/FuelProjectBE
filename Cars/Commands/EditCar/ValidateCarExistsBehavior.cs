@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FuelProject.Cars.Commands.EditCar
 {
-    public class ValidateCarExistsBehavior : IPipelineBehavior<EditCarCommand, Unit>
+    public class ValidateCarExistsBehavior : IPipelineBehavior<EditCarCommand, ActionResult>
     {
         private readonly ICarRepository _carRepository;
 
@@ -13,13 +13,12 @@ namespace FuelProject.Cars.Commands.EditCar
             _carRepository = carRepository;
         }
 
-        public async Task<Unit> Handle(EditCarCommand request, RequestHandlerDelegate<Unit> next, CancellationToken cancellationToken)
+        public async Task<ActionResult> Handle(EditCarCommand request, RequestHandlerDelegate<ActionResult> next, CancellationToken cancellationToken)
         {
            var car = await _carRepository.GetCarById(request.Id);
             if (car is null)
             {
-               // throw new Exception("Not found");
-                throw new HttpRequestException("Car not found");
+                return new NotFoundObjectResult("Car not found");
             }
             return await next();
         }

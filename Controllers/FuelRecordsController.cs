@@ -22,14 +22,14 @@ namespace FuelProject.Controllers
         [HttpPost("add-fuel-record")]
         public async Task<ActionResult> AddFuelRecord([FromBody] AddFuelRecordCommand command)
         {
-            return Ok(await _mediator.Send(command));
+            return await _mediator.Send(command);
         }
 
         [HttpGet("fuel-records-car")]
-        public async Task<ActionResult> GetFuelRecordsPerCar([FromQuery] string CarId)
+        public async Task<ActionResult<List<FuelRecordDto>>> GetFuelRecordsPerCar([FromQuery] string CarId)
         {
             GetFuelRecordsForCarQuery query = new(CarId);
-            return Ok(await _mediator.Send(query));
+            return await _mediator.Send(query);
         }
 
         [HttpGet("fuel-records-user")]
@@ -43,7 +43,7 @@ namespace FuelProject.Controllers
         public async Task<ActionResult> EditFuelRecord([FromRoute] string id, [FromBody] EditFuelRecordCommand command)
         {
             command.Id = id;
-            return Ok(await _mediator.Send(command));
+            return await _mediator.Send(command);
         }
     }
 }
