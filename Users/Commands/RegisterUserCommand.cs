@@ -28,7 +28,6 @@ public class RegisterUserCommnadHandler : IRequestHandler<RegisterUserCommand, A
 
     public async Task<ActionResult<LoginUserDto>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        //TODO vytvořit servicu
         var user = await _userService.CreateUser(request.FirstName, request.Surname, request.Password, request.Username);
         _context.Add(user);
         await _context.SaveChangesAsync();
