@@ -23,9 +23,10 @@ public class EditFuelRecordCommandHandler : IRequestHandler<EditFuelRecordComman
     private readonly ICarRepository _carRepository;
 
 
-    public EditFuelRecordCommandHandler(IFuelRecordRepository fuelRecordRepository)
+    public EditFuelRecordCommandHandler(IFuelRecordRepository fuelRecordRepository, ICarRepository carRepository)
     {
         _fuelRecordRepository = fuelRecordRepository;
+        _carRepository = carRepository;
     }
 
     public async Task<ActionResult> Handle(EditFuelRecordCommand request, CancellationToken cancellationToken)
