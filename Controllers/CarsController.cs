@@ -1,7 +1,9 @@
-﻿using FuelProject.Cars.Commands;
+﻿using FuelProject.Cars.Commands.AddCar;
 using FuelProject.Cars.Commands.AddUser;
 using FuelProject.Cars.Commands.DeleteCar;
-using FuelProject.Cars.Queries;
+using FuelProject.Cars.Commands.EditCar;
+using FuelProject.Cars.Queries.GetCarsForUser;
+using FuelProject.Domain;
 using FuelProject.Domain.DTos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

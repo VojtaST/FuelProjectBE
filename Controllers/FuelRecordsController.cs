@@ -1,7 +1,8 @@
 ﻿using FuelProject.Domain.DTos;
-using FuelProject.FuelRecords.Commands;
+using FuelProject.FuelRecords.Commands.AddFuelRecord;
+using FuelProject.FuelRecords.Commands.DeleteFuelRecord;
+using FuelProject.FuelRecords.Commands.EditFuelRecord;
 using FuelProject.FuelRecords.Queries;
-using FuelProject.Users.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FuelProject.Controllers;
 
 [Route("api/[controller]")]
-[ApiController,Authorize]
+[ApiController, Authorize]
 public class FuelRecordsController : ControllerBase
 {
     public FuelRecordsController(IMediator mediator)
@@ -22,14 +23,14 @@ public class FuelRecordsController : ControllerBase
     [HttpPost("add-fuel-record")]
     public async Task<ActionResult> AddFuelRecord([FromBody] AddFuelRecordCommand command)
     {
-        return Ok(await _mediator.Send(command));
+        return await _mediator.Send(command);
     }
 
     [HttpGet("fuel-records-car")]
-    public async Task<ActionResult> GetFuelRecordsPerCar([FromQuery] string CarId)
+    public async Task<ActionResult<List<FuelRecordDto>>> GetFuelRecordsPerCar([FromQuery] string CarId)
     {
         GetFuelRecordsForCarQuery query = new(CarId);
-        return Ok(await _mediator.Send(query));
+        return await _mediator.Send(query);
     }
 
     [HttpGet("fuel-records-user")]
@@ -43,6 +44,20 @@ public class FuelRecordsController : ControllerBase
     public async Task<ActionResult> EditFuelRecord([FromRoute] string id, [FromBody] EditFuelRecordCommand command)
     {
         command.Id = id;
-        return Ok(await _mediator.Send(command));
+        return await _mediator.Send(command);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<FuelRecordDto>> GetFuelRecord([FromRoute] string id)
+    {
+        GetFuelRecordQuery query = new(id);
+        return await _mediator.Send(query);
+    }
+
+    [HttpDelete("{id}/delete")]
+    public async Task<ActionResult<FuelRecordDto>> DeleteFuelRecord([FromRoute] string id)
+    {
+        DeleteFuelRecordCommand command = new(id);
+        return await _mediator.Send(command);
     }
 }

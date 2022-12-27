@@ -1,5 +1,5 @@
 ﻿using FuelProject.Domain.Entities;
-using FuelProject.FuelRecords.Commands;
+using FuelProject.FuelRecords.Commands.AddFuelRecord;
 using FuelProject.Repositories;
 
 namespace FuelProject.Services;

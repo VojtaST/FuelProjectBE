@@ -19,12 +19,12 @@ public class ValidateAddUserToCarBehavior : IPipelineBehavior<AddUserToCarComman
     {
         if ((await _userRepository.GetUserById(request.UserId)) is null)
         {
-            return new NotFoundResult();
+            return new NotFoundObjectResult($"User with id: {request.UserId} was not found");
         }
 
         if ((await _carRepository.GetCarById(request.CarId)) is null)
-        { 
-        
+        {
+            return new NotFoundObjectResult($"Car with id: {request.CarId} was not found");
         }
         return await next();
     }

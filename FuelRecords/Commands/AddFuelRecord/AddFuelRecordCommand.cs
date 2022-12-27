@@ -1,10 +1,13 @@
-﻿using FuelProject.Repositories;
+﻿using FuelProject.Cars.Commands.AddUser;
+using FuelProject.Repositories;
 using FuelProject.Services;
 using MediatR;
+using MediatR.Extensions.AttributedBehaviors;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FuelProject.FuelRecords.Commands;
+namespace FuelProject.FuelRecords.Commands.AddFuelRecord;
 
+[MediatRBehavior(typeof(ValidateAddFuelRecordBehavior))]
 public class AddFuelRecordCommand : IRequest<ActionResult>
 {
     public string NameOfFuelStation { get; set; }
@@ -17,7 +20,7 @@ public class AddFuelRecordCommand : IRequest<ActionResult>
     public string UserId { get; set; }
 }
 
-public class AddFuelRecordCommandHandler : IRequestHandler<AddFuelRecordCommand,ActionResult>
+public class AddFuelRecordCommandHandler : IRequestHandler<AddFuelRecordCommand, ActionResult>
 {
     private readonly IFuelRecordRepository _fuelRecordRepository;
     private readonly IFuelRecordService _fuelRecordService;
@@ -33,6 +36,6 @@ public class AddFuelRecordCommandHandler : IRequestHandler<AddFuelRecordCommand,
         var fuelRecord = await _fuelRecordService.CreateFuelRecord(request, request.UserId);
 
         await _fuelRecordRepository.Add(fuelRecord);
-        return new OkResult();
+        return new OkObjectResult(fuelRecord.Id.ToString());
     }
 }

@@ -1,10 +1,12 @@
 ﻿using FuelProject.Repositories;
 using MediatR;
+using MediatR.Extensions.AttributedBehaviors;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FuelProject.FuelRecords.Commands;
+namespace FuelProject.FuelRecords.Commands.EditFuelRecord;
 
-public class EditFuelRecordCommand : IRequest<ActionResult>
+[MediatRBehavior(typeof(ValidateFuelRecordExistsBehavior<EditFuelRecordCommand>))]
+public class EditFuelRecordCommand : IRequest<ActionResult>, IFuelRecordById
 {
     public string Id { get; set; } = string.Empty;
     public string NameOfFuelStation { get; set; }
