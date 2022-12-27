@@ -1,14 +1,14 @@
-﻿using FuelProject.Cars.Commands.EditCar;
+﻿using FuelProject.Domain.DTos;
 using FuelProject.Domain.Entities;
 using FuelProject.Repositories;
 using MediatR;
 using MediatR.Extensions.AttributedBehaviors;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FuelProject.Cars.Commands;
+namespace FuelProject.Cars.Commands.EditCar;
 
-[MediatRBehavior(typeof(ValidateCarExistsBehavior))]
-public class EditCarCommand : IRequest<ActionResult>
+[MediatRBehavior(typeof(ValidateCarExistsBehavior<EditCarCommand>))]
+public class EditCarCommand : IRequest<ActionResult>, ICarById
 {
     public string Id { get; set; } = string.Empty;
     public string Name { get; set; }

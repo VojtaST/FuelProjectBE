@@ -19,9 +19,16 @@ public class FuelRecordRepository : IFuelRecordRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<FuelRecord> Get(string id)
+    public async Task Delete(string id)
     {
-        return await _context.FuelRecords.Include(x => x.Car).FirstAsync(x => x.Id.ToString() == id);
+        var record = await Get(id);
+        _context.FuelRecords.Remove(record);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<FuelRecord?> Get(string id)
+    {
+        return await _context.FuelRecords.Include(x => x.Car).FirstOrDefaultAsync(x => x.Id.ToString() == id);
     }
 
     public async Task<IEnumerable<FuelRecord>> GetFuelRecordsForCar(string carId)

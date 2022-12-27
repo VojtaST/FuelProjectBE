@@ -2,24 +2,23 @@
 using FuelProject.Domain.DTos;
 using FuelProject.Domain.Entities;
 using FuelProject.Infrastructure;
-using FuelProject.Repositories;
 using MediatR;
+using MediatR.Extensions.AttributedBehaviors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace FuelProject.Cars.Queries;
+namespace FuelProject.Cars.Queries.GetCarsForUser;
 
+[MediatRBehavior(typeof(ValidateUserExistsBehavior))]
 public record GetCarsForUserQuery(string UserId) : IRequest<ActionResult<List<CarDto>>>;
 
 public class GetCarsForUserQueryHandler : IRequestHandler<GetCarsForUserQuery, ActionResult<List<CarDto>>>
 {
-    private readonly ICarRepository _carRepository;
     private readonly IMapper _mapper;
     private readonly DiaryDbContext _context;
 
-    public GetCarsForUserQueryHandler(ICarRepository carRepository, IMapper mapper, DiaryDbContext context)
+    public GetCarsForUserQueryHandler(IMapper mapper, DiaryDbContext context)
     {
-        _carRepository = carRepository;
         _mapper = mapper;
         _context = context;
     }

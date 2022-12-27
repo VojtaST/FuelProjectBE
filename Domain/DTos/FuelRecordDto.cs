@@ -2,6 +2,7 @@
 
 public class FuelRecordDto
 {
+    public Guid Id { get; set; }
     public string NameOfFuelStation { get; set; }
     public float FuelAmount { get; set; }
     public int DashboardKm { get; set; }
