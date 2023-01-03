@@ -24,7 +24,6 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost("register")]
-    [EnableCors("AllowOrigin")]
     public async Task<ActionResult<LoginUserDto>> RegisterUser([FromBody] RegisterUserCommand command)
     {
         return await _mediator.Send(command);

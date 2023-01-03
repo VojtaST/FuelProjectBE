@@ -17,7 +17,7 @@ builder.Services.AddDbContext<DiaryDbContext>(options =>
             new MariaDbServerVersion(new Version(10, 9, 3)));
 });
 
-// Add services to the container.
+
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 builder.Services.AddMediatRAttributedBehaviors(Assembly.GetExecutingAssembly());
 builder.Services.AddAutoMapper(config => config.AddMaps(Assembly.GetExecutingAssembly()));
@@ -29,7 +29,7 @@ builder.Services.AddScoped<IFuelRecordService, FuelRecordService>();
 
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -55,7 +55,6 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddCors(c =>
 {
-    //c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
     c.AddPolicy("AllowOrigin", options => options.WithOrigins("http://localhost:53135",
                                     "http://localhost:4200"
                                     )
@@ -67,8 +66,6 @@ var app = builder.Build();
 app.UseCors("AllowOrigin");
 
 
-
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
