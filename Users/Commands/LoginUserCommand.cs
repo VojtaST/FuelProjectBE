@@ -2,10 +2,12 @@
 using FuelProject.Repositories;
 using FuelProject.Services;
 using MediatR;
+using MediatR.Extensions.AttributedBehaviors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FuelProject.Users.Commands;
 
+[MediatRBehavior(typeof(ValidateUserExistsBehavior))]
 public record LoginUserCommand(string userName, string password) : IRequest<ActionResult<LoginUserDto>>;
 public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, ActionResult<LoginUserDto>>
 {
@@ -22,7 +24,6 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, ActionR
     {
         if (await _userService.CheckCredentials(request.userName, request.password))
         {
-            //vygenerovat token
             var user = await _userRepository.GetUserByUsername(request.userName);
             var authResult = await _userService.GenerateToken();
 
